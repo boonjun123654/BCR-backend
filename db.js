@@ -1,11 +1,13 @@
-const mysql = require("mysql2/promise");
+// backend/db.js
+const { Pool } = require("pg");
 
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "casino",
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-module.exports = pool;
-
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+};
